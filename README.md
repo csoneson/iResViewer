@@ -22,6 +22,6 @@ if (length(pkg) > 0) {
 	biocLite(pkg, dependencies = TRUE, ask = FALSE)
 }
 
-## Install countsimQC
+## Install iResViewer
 devtools::install_github("csoneson/iResViewer")
 ```
