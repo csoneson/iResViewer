@@ -2,24 +2,47 @@
 % Please edit documentation in R/iResViewer.R
 \name{iResViewer}
 \alias{iResViewer}
-\title{Interactive visualization of DE results}
+\title{Interactive visualization of differential gene expression results}
 \usage{
-iResViewer(results = list(), dimred = list(), genemodels = NULL,
-  bwFiles = NULL, bwCond = NULL, appTitle = "iResViewer")
+iResViewer(wideResults = list(), longResults = list(), dimRed = list(),
+  geneModels = NULL, geneInfo = NULL, bwFiles = NULL, bwCond = NULL,
+  abundances = list(), appTitle = "iResViewer", ...)
 }
 \arguments{
-\item{results}{List of result data frames}
+\item{wideResults}{Named list of result data frames. These will be displayed
+as searchable tables, each in its own tab.}
 
-\item{dimred}{List of dimension reduction results}
+\item{longResults}{Named list of result data frames in "long" form (one row
+per gene/contrast combination). These will be used to generate volcano
+plots.}
 
-\item{genemodels}{Gene models}
+\item{dimRed}{Named list of dimension reduction results. Each element of the
+list must have at least three columns: two columns with coordinates in the
+low-dimensional space and one column with sample IDs or group labels.}
 
-\item{bwFiles}{Vector of bigWig files}
+\item{geneModels}{A GRanges object with gene models, typically generated from
+a gtf file.}
 
-\item{bwCond}{Vector of conditions for bigWig files}
+\item{geneInfo}{Data frame with gene annotation information.}
+
+\item{bwFiles}{Named vector with paths to bigWig files. These will be used to
+generate coverage plots.}
+
+\item{bwCond}{Named vector corresponding to \code{bwFiles}, giving the group
+label for each bigWig file. These will be used to color the coverage plots
+by group.}
+
+\item{abundances}{Named list with data frames in "long" format (one row per
+gene/sample combination), containing abundance estimates. These will be
+used to illustrate the abundance pattern for selected genes.}
 
 \item{appTitle}{App title}
+
+\item{...}{Additional arguments (currently not used)}
 }
 \description{
-Interactive visualization of DE results
+Interactive visualization of differential gene expression results
+}
+\author{
+Charlotte Soneson
 }
