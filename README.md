@@ -10,7 +10,8 @@
 ## List dependencies
 pkg <- c("shiny", "ggplot2", "ggrepel", "dplyr", "tidyr", "Gviz", 
          "DT", "shinydashboard", "GenomicRanges", "IRanges", 
-         "rtracklayer", "devtools")
+         "rtracklayer", "S4Vectors", "GenomeInfoDb", 
+         "BiocGenerics", "devtools")
 
 ## Check if dependencies are already installed
 pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
