@@ -4,7 +4,7 @@
 \alias{iResViewer}
 \title{Interactive visualization of differential gene expression results}
 \usage{
-iResViewer(wideResults = list(), longResults = list(), dimRed = list(),
+iResViewer(wideResults = list(), longResults = list(), dimReds = list(),
   geneModels = NULL, geneInfo = NULL, bwFiles = NULL, bwCond = NULL,
   abundances = list(), appTitle = "iResViewer", ...)
 }
@@ -14,16 +14,19 @@ as searchable tables, each in its own tab.}
 
 \item{longResults}{Named list of result data frames in "long" form (one row
 per gene/contrast combination). These will be used to generate volcano
-plots.}
+plots. Each data frame should have at least four columns: gene (the gene
+ID), logFC (log-fold change), FDR (adjusted p-value) and mlog10PValue
+(-log10(nominal p-value)).}
 
-\item{dimRed}{Named list of dimension reduction results. Each element of the
+\item{dimReds}{Named list of dimension reduction results. Each element of the
 list must have at least three columns: two columns with coordinates in the
 low-dimensional space and one column with sample IDs or group labels.}
 
 \item{geneModels}{A GRanges object with gene models, typically generated from
 a gtf file.}
 
-\item{geneInfo}{Data frame with gene annotation information.}
+\item{geneInfo}{Data frame with gene annotation information. Should have at
+least two columns: gene (the gene ID) and symbol (the gene symbol).}
 
 \item{bwFiles}{Named vector with paths to bigWig files. These will be used to
 generate coverage plots.}
@@ -34,7 +37,10 @@ by group.}
 
 \item{abundances}{Named list with data frames in "long" format (one row per
 gene/sample combination), containing abundance estimates. These will be
-used to illustrate the abundance pattern for selected genes.}
+used to illustrate the abundance pattern for selected genes. Each data
+frame must have at least four columns: sample (the sample ID), gene (the
+gene ID), value (the abundance) and group (a sample group label, used to
+order and color the points in the plot).}
 
 \item{appTitle}{App title}
 

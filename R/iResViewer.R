@@ -7,7 +7,7 @@
 #'   plots. Each data frame should have at least four columns: gene (the gene
 #'   ID), logFC (log-fold change), FDR (adjusted p-value) and mlog10PValue
 #'   (-log10(nominal p-value)).
-#' @param dimRed Named list of dimension reduction results. Each element of the
+#' @param dimReds Named list of dimension reduction results. Each element of the
 #'   list must have at least three columns: two columns with coordinates in the
 #'   low-dimensional space and one column with sample IDs or group labels.
 #' @param geneModels A GRanges object with gene models, typically generated from
@@ -39,7 +39,7 @@
 #' @export
 #'
 iResViewer <- function(wideResults = list(), longResults = list(),
-                       dimRed = list(), geneModels = NULL, geneInfo = NULL,
+                       dimReds = list(), geneModels = NULL, geneInfo = NULL,
                        bwFiles = NULL, bwCond = NULL, abundances = list(),
                        appTitle = "iResViewer", ...) {
   options(ucscChromosomeNames = FALSE)
@@ -64,28 +64,28 @@ iResViewer <- function(wideResults = list(), longResults = list(),
                   ## ======================================================== ##
                   ## Tabs with dimension reduction results
                   ## ======================================================== ##
-                  lapply(names(dimRed), function(w)
+                  lapply(names(dimReds), function(w)
                     shiny::tabPanel(
                       w,
                       shiny::fluidRow(
                         shiny::column(
                           4, shiny::selectInput(paste0(w, "_pcx"), "x-axis",
-                                                choices = colnames(dimRed[[w]]),
-                                                selected = colnames(dimRed[[w]])[2])),
+                                                choices = colnames(dimReds[[w]]),
+                                                selected = colnames(dimReds[[w]])[2])),
                         shiny::column(
                           4, shiny::selectInput(paste0(w, "_pcy"), "y-axis",
-                                                choices = colnames(dimRed[[w]]),
-                                                selected = colnames(dimRed[[w]])[3])),
+                                                choices = colnames(dimReds[[w]]),
+                                                selected = colnames(dimReds[[w]])[3])),
                         shiny::column(
                           4, shiny::selectInput(paste0(w, "_pccol"), "color by",
-                                                choices = colnames(dimRed[[w]]),
-                                                selected = colnames(dimRed[[w]])[ncol(dimRed[[w]])]))
+                                                choices = colnames(dimReds[[w]]),
+                                                selected = colnames(dimReds[[w]])[ncol(dimReds[[w]])]))
                       ),
                       shiny::fluidRow(
                         shiny::column(
                           4, shiny::selectInput(paste0(w, "_pclab"), "Labels",
-                                                choices = colnames(dimRed[[w]]),
-                                                selected = colnames(dimRed[[w]])[1])),
+                                                choices = colnames(dimReds[[w]]),
+                                                selected = colnames(dimReds[[w]])[1])),
                         shiny::column(
                           4, shiny::checkboxInput(paste0(w, "_dopclab"), "Show labels",
                                                   value = FALSE))
@@ -193,22 +193,22 @@ iResViewer <- function(wideResults = list(), longResults = list(),
     ## ====================================================================== ##
     Map(function(nm) {
       output[[paste0(nm, "_dimred")]] <- shiny::renderPlot({
-        p <- ggplot(dimRed[[nm]], aes_string(x = input[[paste0(nm, "_pcx")]],
-                                             y = input[[paste0(nm, "_pcy")]],
-                                             color = input[[paste0(nm, "_pccol")]],
-                                             label = input[[paste0(nm, "_pclab")]])) +
+        p <- ggplot(dimReds[[nm]], aes_string(x = input[[paste0(nm, "_pcx")]],
+                                              y = input[[paste0(nm, "_pcy")]],
+                                              color = input[[paste0(nm, "_pccol")]],
+                                              label = input[[paste0(nm, "_pclab")]])) +
           geom_point(size = 5) + coord_fixed() + theme_bw() +
           theme(axis.text = element_text(size = 14),
                 axis.title = element_text(size = 16))
         if (input[[paste0(nm, "_dopclab")]]) p <- p + ggrepel::geom_label_repel()
         p
       })
-    }, names(dimRed))
+    }, names(dimReds))
 
     Map(function(nm) {
       output[[paste0(nm, "_dimred_ui")]] <- shiny::renderUI(
         shiny::plotOutput(paste0(nm, "_dimred"), height = "600px"))
-    }, names(dimRed))
+    }, names(dimReds))
 
     ## ====================================================================== ##
     ## Abundance plots
