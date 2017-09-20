@@ -8,6 +8,8 @@
 #' @importFrom S4Vectors mcols
 #' @importFrom BiocGenerics subset
 #'
+#' @export
+#'
 createGenemodels <- function(gtfFile) {
   genemodels <- rtracklayer::import(gtfFile)
   idx <- match(c("transcript_id", "gene_id", "exon_id"),
@@ -50,6 +52,8 @@ createGenemodels <- function(gtfFile) {
 #' @importFrom GenomeInfoDb seqnames
 #' @importFrom S4Vectors mcols
 #' @importFrom BiocGenerics start end subset setdiff
+#'
+#' @export
 #'
 plotGvizTracks <- function(showGene = NULL, geneModels = NULL, geneModels2 = NULL,
                            gtfFile = NULL, bwFiles = NULL,
