@@ -92,7 +92,8 @@ plotGvizTracks <- function(showGene = NULL, geneModels = NULL, geneModels2 = NUL
                                                        end = maxCoord),
                              strand = "*"))]
     # gmo <- gmo[!(gmo %in% gm)]
-    gmo <- BiocGenerics::setdiff(gmo, gm)
+    # gmo <- gmo[!(IRanges::overlapsAny(gmo, gm, type = "equal"))]
+    gmo <- BiocGenerics::subset(gmo, gene != gm$gene[1])
 
     ## Additional track (e.g., excluded features)
     if (!is.null(geneModels2)) {
