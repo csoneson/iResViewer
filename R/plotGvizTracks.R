@@ -146,9 +146,9 @@ plotGvizTracks <- function(showGene = NULL, geneModels = NULL, geneModels2 = NUL
   }
 
   legend_added <- FALSE
-  allcols <- c("#DC050C", "#E8601C", "#7BAFDE", "#1965B0", "#B17BA6",
-               "#882E72", "#F1932D", "#F6C141", "#F7EE55", "#4EB265",
-               "#90C987", "#CAEDAB", "#777777")[c(1, 3, 5, 10, 13, 8, 4, 6, 12, 2, 7, 9, 11)]
+  allcols <- c("#DC050C", "#7BAFDE", "#B17BA6", "#4EB265", "#777777",
+               "#F6C141", "#1965B0", "#882E72", "#CAEDAB", "#E8601C",
+               "#F1932D", "#F7EE55", "#90C987")
 
   ## RNAseq coverage tracks
   if (!is.null(bwFiles)) {

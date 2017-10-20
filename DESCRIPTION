@@ -1,7 +1,7 @@
 Package: iResViewer
 Type: Package
 Title: Interactive visualization of differential expression results
-Version: 0.1.0
+Version: 0.2.0
 Author: Charlotte Soneson
 Maintainer: Charlotte Soneson <charlottesoneson@gmail.com>
 Description: Create an interactive (shiny-based) visualization of 

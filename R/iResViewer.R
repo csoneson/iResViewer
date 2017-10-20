@@ -176,8 +176,8 @@ iResViewer <- function(wideResults = list(), longResults = list(),
       if (input$sel.gene == "")
         return(NULL)
       else
-        plotGvizTracks(showGene = input$sel.gene, geneModels = geneModels,
-                       geneModels2 = NULL,
+        plotGvizTracks(showGene = gsub("\\.[0-9]+$", "", input$sel.gene),
+                       geneModels = geneModels, geneModels2 = NULL,
                        gtfFile = NULL, bwFiles = bwFiles,
                        bwCond = bwCond, showChr = NULL,
                        minCoord = NULL, maxCoord = NULL,
@@ -224,10 +224,12 @@ iResViewer <- function(wideResults = list(), longResults = list(),
       output[[paste0(nm, "_abundance")]] <- shiny::renderPlot({
         if (input$sel.gene == "") return(NULL)
         else {
-          if (!(tolower(input$sel.gene) %in% c(gsub("\\.[0-9]{1,2}$", "", tolower(geneInfo$gene)),
-                                               tolower(geneInfo$symbol)))) return(NULL)
-          id <- (geneInfo %>% filter(gsub("\\.[0-9]{1,2}$", "", tolower(gene)) == tolower(input$sel.gene) |
-                                       tolower(symbol) == tolower(input$sel.gene)))$gene
+          if (!(tolower(gsub("\\.[0-9]+$", "", input$sel.gene)) %in%
+                c(gsub("\\.[0-9]+$", "", tolower(geneInfo$gene)),
+                  tolower(geneInfo$symbol)))) return(NULL)
+          id <- (geneInfo %>% filter(gsub("\\.[0-9]+$", "",
+                                          tolower(gene)) == tolower(gsub("\\.[0-9]+$", "", input$sel.gene)) |
+                                       tolower(symbol) == tolower(gsub("\\.[0-9]+$", "", input$sel.gene))))$gene
           if (is.null(id)) return(NULL)
           else {
             df <- abundances[[nm]] %>% dplyr::filter(gene %in% id) %>%
@@ -235,7 +237,7 @@ iResViewer <- function(wideResults = list(), longResults = list(),
               dplyr::mutate(sample = factor(sample, levels = unique(sample)))
             ggplot(df, aes(x = sample, y = value, group = gene, col = group)) +
               geom_line(col = "black") + geom_point(size = 3) +
-              theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 14),
+              theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 14),
                                  legend.position = "bottom",
                                  axis.text.y = element_text(size = 14),
                                  axis.title.y = element_text(size = 16)) +
@@ -250,10 +252,12 @@ iResViewer <- function(wideResults = list(), longResults = list(),
       output[[paste0(nm, "_abundance_hover_info")]] <- shiny::renderUI({
         if (input$sel.gene == "") return(NULL)
         else {
-          if (!(tolower(input$sel.gene) %in% c(gsub("\\.[0-9]{1,2}$", "", tolower(geneInfo$gene)),
-                                               tolower(geneInfo$symbol)))) return(NULL)
-          id <- (geneInfo %>% filter(gsub("\\.[0-9]{1,2}$", "", tolower(gene)) == tolower(input$sel.gene) |
-                                       tolower(symbol) == tolower(input$sel.gene)))$gene
+          if (!(tolower(gsub("\\.[0-9]+$", "", input$sel.gene)) %in%
+                c(gsub("\\.[0-9]+$", "", tolower(geneInfo$gene)),
+                  tolower(geneInfo$symbol)))) return(NULL)
+          id <- (geneInfo %>% filter(gsub("\\.[0-9]+$", "",
+                                          tolower(gene)) == tolower(gsub("\\.[0-9]+$", "", input$sel.gene)) |
+                                       tolower(symbol) == tolower(gsub("\\.[0-9]+$", "", input$sel.gene))))$gene
           if (is.null(id)) return(NULL)
           else {
             hover <- input[[paste0(nm, "_abundance_hover")]]
@@ -296,7 +300,7 @@ iResViewer <- function(wideResults = list(), longResults = list(),
         shiny::nearPoints(longResults[[nm]], input[[paste0(nm, "_volcano_click")]], threshold = 5,
                           maxpoints = 1, panelvar1 = "contrast"))
       shiny::observeEvent(input[[paste0(nm, "_volcano_click")]], {
-        shiny::updateTextInput(session, "sel.gene", value = gsub("\\.[0-9]{1,2}$", "", pp()$gene))
+        shiny::updateTextInput(session, "sel.gene", value = gsub("\\.[0-9]+$", "", pp()$gene))
       })
     }, names(longResults))
 
@@ -312,12 +316,14 @@ iResViewer <- function(wideResults = list(), longResults = list(),
                 strip.text = element_text(size = 15))
         if (input$sel.gene == "") return(p + geom_point(size = 1))
         else {
-          if (!(tolower(input$sel.gene) %in% c(gsub("\\.[0-9]{1,2}$", "", tolower(longResults[[nm]]$gene)),
-                                               tolower(longResults[[nm]]$symbol))))
+          if (!(tolower(gsub("\\.[0-9]+$", "", input$sel.gene)) %in%
+                c(gsub("\\.[0-9]+$", "", tolower(longResults[[nm]]$gene)),
+                  tolower(longResults[[nm]]$symbol))))
             return(p + geom_point(size = 1))
           id <- (longResults[[nm]] %>%
-                   dplyr::filter(gsub("\\.[0-9]{1,2}$", "", tolower(gene)) == tolower(input$sel.gene) |
-                                   tolower(symbol) == tolower(input$sel.gene)))$gene
+                   dplyr::filter(gsub("\\.[0-9]+$", "",
+                                      tolower(gene)) == tolower(gsub("\\.[0-9]+$", "", input$sel.gene)) |
+                                   tolower(symbol) == tolower(gsub("\\.[0-9]+$", "", input$sel.gene))))$gene
           if (is.null(id)) return(p + geom_point(size = 1))
           p + geom_point(size = 1, alpha = 0.1) +
             geom_point(data = longResults[[nm]] %>% dplyr::filter(gene %in% id), size = 4, pch = 21,
